@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEBULA - 인터랙티브 디지털 우주</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery-1.12.3.js" defer></script>
+    <script src="js/constellations.js" defer></script>
+    <script src="js/script.js" defer></script>
+</head>
+<body>
+    <!-- slide 기능: 마우스를 따라오는 성운 빛 + 별 반짝임 배경 -->
+    <div class="space-bg" aria-hidden="true">
+        <span class="star star-1"></span><span class="star star-2"></span>
+        <span class="star star-3"></span><span class="star star-4"></span>
+        <span class="star star-5"></span><span class="star star-6"></span>
+        <span class="nebula-cloud cloud-a"></span><span class="nebula-cloud cloud-b"></span>
+    </div>
+
+    <!-- 좌우 여백 우주 장식 (화면이 넓을 때만 보임) -->
+    <div class="side-deco" aria-hidden="true">
+        <span class="sd-orbit sd-orbit-l"></span><span class="sd-orbit sd-orbit-r"></span>
+        <div class="sd-planet sd-left"><i class="sd-moon"></i></div>
+        <div class="sd-planet sd-right"><i class="sd-ring"></i><i class="sd-ring-front"></i></div>
+        <span class="sd-dwarf"></span>
+        <span class="meteor m1"></span><span class="meteor m2"></span><span class="meteor m3"></span><span class="meteor m4"></span>
+    </div>
+
+    <div class="wrap">
+        <div class="inner">
+            <!-- ===== HEADER (food 형식 유지: 로고 + 드롭다운 메뉴) ===== -->
+            <header id="header">
+                <h1>
+                    <a href="#">✦ NEBULA</a>
+                </h1>
+                <nav id="nav">
+                    <ul>
+                        <li>
+                            <a href="#">내행성</a>
+                            <ul class="sub">
+                                <li><a href="#" data-planet="mercury">수성</a></li>
+                                <li><a href="#" data-planet="venus">금성</a></li>
+                                <li><a href="#" data-planet="earth">지구</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">외행성</a>
+                            <ul class="sub">
+                                <li><a href="#" data-planet="mars">화성</a></li>
+                                <li><a href="#" data-planet="jupiter">목성</a></li>
+                                <li><a href="#" data-planet="saturn">토성</a></li>
+                                <li><a href="#" data-planet="uranus">천왕성</a></li>
+                                <li><a href="#" data-planet="neptune">해왕성</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">항성/위성</a>
+                            <ul class="sub">
+                                <li><a href="#" data-planet="sun">태양</a></li>
+                                <li><a href="#" data-planet="moon">달</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">체험</a>
+                            <ul class="sub">
+                                <li><a href="#" data-open="universe">메인 우주 탐험</a></li>
+                                <li><a href="#" data-open="constellation">별자리 연결</a></li>
+                                <li><a href="#" data-open="nebula">마우스 성운</a></li>
+                                <li><a href="#" data-open="gallery">천체 사진 갤러리</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="menuBg"></div>
+            </header>
+
+            <!-- ===== SLIDE (food 슬라이드 + slide의 이전/다음 버튼·점·정지) ===== -->
+            <section class="slide">
+                <ul>
+                    <li class="s1">
+                        <a href="#" data-open="universe">
+                            <h2><span>태양부터 해왕성, 달까지 한자리에!</span> 행성을 눌러 우주를 탐험하세요!</h2>
+                        </a>
+                    </li>
+                    <li class="s2">
+                        <a href="#" data-open="constellation">
+                            <h2><span>황도 12궁부터 계절 별자리까지,</span> 별을 이어 이야기를 만나요!</h2>
+                        </a>
+                    </li>
+                    <li class="s3">
+                        <a href="#" data-open="nebula">
+                            <h2><span>커서를 따라 움직이는 빛,</span> 마우스 성운을 체험해요!</h2>
+                        </a>
+                    </li>
+                </ul>
+                <button class="slide-arrow slide-prev" type="button" aria-label="이전 슬라이드">‹</button>
+                <button class="slide-arrow slide-next" type="button" aria-label="다음 슬라이드">›</button>
+                <div class="slide-dots" role="group" aria-label="슬라이드 선택">
+                    <button type="button" class="on" aria-label="1번 슬라이드"></button>
+                    <button type="button" aria-label="2번 슬라이드"></button>
+                    <button type="button" aria-label="3번 슬라이드"></button>
+                </div>
+            </section>
+
+            <!-- ===== CONTENTS (food: 탭 / 배너 / 바로가기) ===== -->
+            <div class="contents">
+                <article class="tab">
+                    <ul class="tabmenu">
+                        <li class="on">
+                            <h2><a href="#">오늘의 밤하늘</a></h2>
+                            <div class="sky tabcon">
+                                <div class="sky-top">
+                                    <span class="sky-moon-ico" id="moonIco" aria-hidden="true">🌙</span>
+                                    <div class="sky-top-txt">
+                                        <strong id="skyDate">오늘</strong>
+                                        <span id="moonText">달 위상을 계산하는 중…</span>
+                                    </div>
+                                </div>
+                                <p class="sky-label">이번 달 잘 보이는 별자리 <small>· 밤 9시경 기준 · 누르면 도감이 열려요</small></p>
+                                <div class="sky-chips" id="skyChips"></div>
+                                <p class="sky-fact"><b>오늘의 상식</b> <span id="skyFact"></span></p>
+                            </div>
+                        </li>
+                        <li>
+                            <h2><a href="#">우주 퀴즈</a></h2>
+                            <div class="quiz tabcon" id="quizBox">
+                                <div class="quiz-head"><span id="quizNo">Q1 / 5</span><span id="quizScore">점수 0</span></div>
+                                <p class="quiz-q" id="quizQ"></p>
+                                <div class="quiz-opts" id="quizOpts"></div>
+                                <div class="quiz-foot"><p class="quiz-exp" id="quizExp"></p><button type="button" class="quiz-next" id="quizNext" hidden>다음 ›</button></div>
+                            </div>
+                        </li>
+                        <li>
+                            <h2><a href="#">갤러리</a></h2>
+                            <div class="gall tabcon">
+                                <ul>
+                                    <li><a href="#" data-open="gallery"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=300&q=70" alt="성운 사진"></a></li>
+                                    <li><a href="#" data-open="gallery"><img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=300&q=70" alt="지구 사진"></a></li>
+                                    <li><a href="#" data-open="gallery"><img src="https://images.unsplash.com/photo-1464802686167-b939a6910659?auto=format&fit=crop&w=300&q=70" alt="은하 사진"></a></li>
+                                </ul>
+                                <p class="gall-more"><a href="#" data-open="gallery">사진 <b data-count="gallery">9</b>장 모두 보기 ↗</a></p>
+                            </div>
+                        </li>
+                    </ul>
+                </article>
+                <article class="banner">
+                    <h2>배너</h2>
+                    <a href="#" data-open="constellation">
+                        <div>
+                            <h3>별자리 연결 체험!</h3>
+                            <p>
+                                황도 12궁과 계절별 대표 별자리 <b data-count="constellations">22</b>종<br>
+                                별을 이어 신화와 관측 정보를 만나 보세요!
+                            </p>
+                            <p class="txt"><span>#별자리도감</span> 별을 이어 보세요!</p>
+                        </div>
+                    </a>
+                </article>
+                <article class="go">
+                    <h2>바로가기</h2>
+                    <ul>
+                        <li>
+                            <a href="#" data-open="universe" title="메인 우주 탐험 열기">
+                                <p class="sun"></p>
+                                <span>우주 탐험</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" data-open="constellation" title="별자리 연결 열기">
+                                <p class="saturn"></p>
+                                <span>별자리 연결</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" data-open="nebula" title="마우스 성운 열기">
+                                <p class="neb"></p>
+                                <span>마우스 성운</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" data-open="gallery" title="천체 사진 갤러리 열기">
+                                <p class="earth"></p>
+                                <span>사진 갤러리</span>
+                            </a>
+                        </li>
+                    </ul>
+                </article>
+            </div>
+
+            <!-- ===== FOOTER (food 형식 유지) ===== -->
+            <footer id="footer">
+                <p class="flogo">✦ NEBULA</p>
+                <div>
+                    <ul class="fmenu">
+                        <li><a href="#">프로젝트소개</a></li>
+                        <li><a href="#">이용약관</a></li>
+                        <li><a href="#">개인정보처리방침</a></li>
+                        <li><a href="#">고객센터</a></li>
+                        <li><a href="#">사이트맵</a></li>
+                    </ul>
+                    <p class="fcopy">
+                        COPYRIGHT &copy; 2026 NEBULA PROJECT. All Rights Reserved.
+                    </p>
+                </div>
+            </footer>
+        </div>
+
+        <!-- ===== 행성 팝업 (food 팝업 + 실제 천체 사진, 불러오지 못하면 그림으로 대체) ===== -->
+        <div id="popup" class="popup">
+            <div class="popcon">
+                <h2 id="pName">태양</h2>
+                <p class="pbadge" id="pBadge"></p>
+                <p class="img">
+                    <img id="pImg" src="" alt="">
+                    <span id="pArt" class="planet-art" hidden></span>
+                </p>
+                <p class="text">
+                    <span id="pDesc"></span><br>
+                    <strong id="pInfo"></strong>
+                </p>
+                <ul class="pstats" id="pStats"></ul>
+                <div class="pcompare"><span>지구 대비 지름</span><div class="pbar"><i id="pBar"></i></div><b id="pRatio"></b></div>
+                <div class="close">
+                    <span class="pnav"><button type="button" id="pPrev">‹ 이전</button><button type="button" id="pNext">다음 ›</button></span>
+                    <button type="button" id="pClose">CLOSE X</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 전체 화면 별자리 연결 (slide 기능) ===== -->
+    <div class="constellation-overlay" id="constellationOverlay" aria-hidden="true">
+        <section class="constellation-window" role="dialog" aria-modal="true" aria-label="별자리 도감 · 별 연결">
+            <header class="constellation-header"><button class="constellation-back" data-close-constellations aria-label="닫기">←</button><span>CONSTELLATIONS · 별자리 도감 <b id="cstDexCount">0 / 22</b></span><button class="constellation-close" data-close-constellations aria-label="닫기">×</button></header>
+            <div class="constellation-stage">
+                <div class="star-field" id="ovField"><svg class="constellation-lines" id="ovLines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="별들을 연결하는 선"></svg><div class="constellation-stars" id="ovStars"></div><div class="fx-layer" id="ovFx" aria-hidden="true"></div></div>
+                <div class="complete-banner" id="completeBanner" role="status" hidden></div>
+                <div class="constellation-intro"><p class="eyebrow">CONNECT THE STARS</p><h2 id="constellationName">오리온자리</h2><p id="constellationDesc">별을 순서대로 선택해 별자리를 완성해 보세요.</p><div class="constellation-actions"><button id="undoStar" class="mini-action">한 단계 취소</button><button id="resetStars" class="mini-action">다시 연결</button><button id="hintStars" class="mini-action" aria-pressed="false">힌트 보기</button><button id="nextConstellation" class="mini-action next" hidden>다음 별자리 →</button></div></div>
+                <aside class="cst-info" id="cstInfo" aria-live="polite">
+                    <p class="eyebrow" id="cstTag">WINTER SKY</p>
+                    <p class="cst-latin" id="cstLatin">Orion · Ori</p>
+                    <dl class="cst-chips" id="cstChips"></dl>
+                    <section class="cst-bright"><h3>★ 가장 밝은 별 · <span id="cstBrightName"></span></h3><p id="cstBright"></p></section>
+                    <section><h3>✦ 신화 이야기</h3><p id="cstStory"></p></section>
+                    <section><h3>✦ 밤하늘에서 찾는 법</h3><p id="cstFind"></p></section>
+                    <section><h3>✦ 알아두기</h3><p id="cstFact"></p></section>
+                    <p class="cst-note">※ 별자리 선은 이해를 돕기 위해 단순화한 모양이에요.</p>
+                </aside>
+                <div class="constellation-progress" id="constellationProgress">0 / 0 선 연결</div>
+            </div>
+            <footer class="constellation-footer">
+                <div class="cst-tabs-row"><div class="cst-tabs" id="cstTabs" role="tablist" aria-label="별자리 분류"></div><p class="cst-group-note" id="cstGroupNote"></p></div>
+                <div class="constellation-choices" id="constellationChoices" role="group" aria-label="별자리 선택"></div>
+            </footer>
+        </section>
+    </div>
+
+    <!-- ===== 전체 화면 메인 우주 탐험 (slide 기능) ===== -->
+    <div class="universe-overlay" id="universeOverlay" aria-hidden="true">
+        <section class="universe-screen pcol" role="dialog" aria-modal="true" aria-label="메인 우주 탐험 · 행성 모음">
+            <div class="universe-stars" id="universeStars" aria-hidden="true"></div>
+            <header class="pcol-head">
+                <button class="pcol-brand" data-close-universe>✦ NEBULA</button>
+                <div class="pcol-title">
+                    <p class="eyebrow">EXPLORE THE SOLAR SYSTEM</p>
+                    <h2>메인 우주 탐험 <small>행성을 눌러 자세히 알아보세요</small></h2>
+                </div>
+                <button class="pcol-close" data-close-universe aria-label="닫기">×</button>
+            </header>
+            <div class="pcol-tabs" id="pcolTabs" role="tablist" aria-label="행성 분류"></div>
+            <div class="pcol-groups" id="pcolGroups"></div>
+            <p class="pcol-foot">원의 크기는 실제 지름 비율을 줄여서 나타낸 것이에요 · 행성을 누르면 정보 팝업이 열려요</p>
+        </section>
+    </div>
+
+    <!-- ===== 천체 사진 갤러리 (slide 기능) ===== -->
+    <div class="fx-overlay" id="galleryOverlay" aria-hidden="true">
+        <section class="fx-window" role="dialog" aria-modal="true" aria-label="천체 사진 갤러리">
+            <header class="fx-header"><span>GALLERY · 사진 <b data-count="gallery">9</b>장</span><button class="fx-close" data-close-fx aria-label="닫기">×</button></header>
+            <div class="fx-body">
+                <div class="real-photo-grid">
+                    <a class="real-photo" href="https://science.nasa.gov/mission/webb/multimedia/images/" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1000&q=85" alt="성운과 별이 빛나는 우주"><span class="photo-overlay"><small>NEBULAE / DEEP SPACE</small><strong>별이 태어나는 공간</strong><em>이미지 더 보기 ↗</em></span></a>
+                    <a class="real-photo" href="https://science.nasa.gov/gallery/our-solar-system-images/" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=900&q=85" alt="우주에서 바라본 지구와 대기"><span class="photo-overlay"><small>PLANET / EARTH</small><strong>우리가 살아가는 행성</strong><em>이미지 더 보기 ↗</em></span></a>
+                    <a class="real-photo" href="https://science.nasa.gov/mission/webb/multimedia/images/" target="_blank" rel="noopener"><img src="https://images.unsplash.com/photo-1464802686167-b939a6910659?auto=format&fit=crop&w=900&q=85" alt="수많은 별과 은하가 있는 깊은 우주"><span class="photo-overlay"><small>GALAXIES / STARS</small><strong>끝없이 펼쳐진 은하</strong><em>이미지 더 보기 ↗</em></span></a>
+                    <a class="real-photo" data-optional href="https://commons.wikimedia.org/wiki/File:Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Pillars_of_creation_2014_HST_WFC3-UVIS_full-res_denoised.jpg?width=1000" alt="창조의 기둥" loading="lazy" referrerpolicy="no-referrer"><span class="photo-overlay"><small>NEBULAE / EAGLE</small><strong>창조의 기둥 — 별이 만들어지는 기둥</strong><em>원본 보기 ↗</em></span></a>
+                    <a class="real-photo" data-optional href="https://commons.wikimedia.org/wiki/File:Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Orion_Nebula_-_Hubble_2006_mosaic_18000.jpg?width=1000" alt="오리온 대성운" loading="lazy" referrerpolicy="no-referrer"><span class="photo-overlay"><small>NEBULAE / ORION</small><strong>오리온 대성운 — 맨눈으로도 보이는 성운</strong><em>원본 보기 ↗</em></span></a>
+                    <a class="real-photo" data-optional href="https://commons.wikimedia.org/wiki/File:Crab_Nebula.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Crab_Nebula.jpg?width=1000" alt="게성운" loading="lazy" referrerpolicy="no-referrer"><span class="photo-overlay"><small>NEBULAE / SUPERNOVA</small><strong>게성운 — 초신성이 남긴 흔적</strong><em>원본 보기 ↗</em></span></a>
+                    <a class="real-photo" data-optional href="https://commons.wikimedia.org/wiki/File:Andromeda_Galaxy_%28with_h-alpha%29.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Andromeda_Galaxy_%28with_h-alpha%29.jpg?width=1000" alt="안드로메다은하" loading="lazy" referrerpolicy="no-referrer"><span class="photo-overlay"><small>GALAXIES / LOCAL GROUP</small><strong>안드로메다은하 — 우리와 가장 가까운 거대 은하</strong><em>원본 보기 ↗</em></span></a>
+                    <a class="real-photo" data-optional href="https://commons.wikimedia.org/wiki/File:Sombrero_Galaxy_in_infrared_light_%28Hubble_Space_Telescope_and_Spitzer_Space_Telescope%29.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Sombrero_Galaxy_in_infrared_light_%28Hubble_Space_Telescope_and_Spitzer_Space_Telescope%29.jpg?width=1000" alt="솜브레로은하" loading="lazy" referrerpolicy="no-referrer"><span class="photo-overlay"><small>GALAXIES / VIRGO</small><strong>솜브레로은하 — 모자를 닮은 은하</strong><em>원본 보기 ↗</em></span></a>
+                    <a class="real-photo" data-optional href="https://commons.wikimedia.org/wiki/File:NASA-Apollo8-Dec24-Earthrise.jpg" target="_blank" rel="noopener"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/NASA-Apollo8-Dec24-Earthrise.jpg?width=1000" alt="지구돋이" loading="lazy" referrerpolicy="no-referrer"><span class="photo-overlay"><small>PLANET / EARTHRISE</small><strong>지구돋이 — 달에서 본 지구</strong><em>원본 보기 ↗</em></span></a>
+                </div>
+                <p class="photo-credit">사진은 온라인에서 불러옵니다. 출처: Unsplash, NASA/ESA/Wikimedia Commons · 더 많은 자료는 <a href="https://science.nasa.gov/gallery/our-solar-system-images/" target="_blank" rel="noopener">NASA 공식 갤러리</a>에서 확인할 수 있습니다.</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- ===== 마우스 반응형 성운 (slide 기능) ===== -->
+    <div class="fx-overlay" id="nebulaOverlay" aria-hidden="true">
+        <section class="fx-window fx-window-wide" role="dialog" aria-modal="true" aria-label="마우스 반응형 성운">
+            <header class="fx-header"><span>LIVE NEBULA · 마우스를 따라 움직이는 성운</span><button class="fx-close" data-close-fx aria-label="닫기">×</button></header>
+            <div class="fx-body fx-body-flush">
+                <div class="nebula-stage" id="nebulaStage">
+                    <canvas id="nebulaCanvas" aria-label="마우스에 반응하는 성운 애니메이션"></canvas>
+                    <div class="nebula-hint" id="nebulaHint">마우스를 움직여 보세요 ✦</div>
+                    <div class="nebula-controls" role="group" aria-label="성운 설정">
+                        <button type="button" class="neb-btn active" data-neb-mode="attract">끌어당기기</button>
+                        <button type="button" class="neb-btn" data-neb-mode="repel">밀어내기</button>
+                        <span class="neb-sep"></span>
+                        <button type="button" class="neb-btn active" data-neb-color="aurora">오로라</button>
+                        <button type="button" class="neb-btn" data-neb-color="violet">보라</button>
+                        <button type="button" class="neb-btn" data-neb-color="teal">청록</button>
+                        <button type="button" class="neb-btn" data-neb-color="auto">자동 변화</button>
+                        <span class="neb-sep"></span>
+                        <button type="button" class="neb-btn neb-save" id="nebSave">📷 저장</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
